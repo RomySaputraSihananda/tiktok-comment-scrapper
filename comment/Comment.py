@@ -19,7 +19,12 @@ class Comment:
 
     def __filter_comments(self, comments: list):
         for comment in comments:
-            self.__result['comments'].append(comment['text'])
+
+            self.__result['comments'].append({
+                'username': comment['user']['unique_id'],
+                'nickname': comment['user']['nickname'],
+                'comment': comment['text'],
+            })
 
     def execute(self, id: str) -> None:
         res: Response = requests.get(f'https://www.tiktok.com/api/comment/list/?aid=1988&aweme_id={id}&count=9999999&cursor=0').json()
