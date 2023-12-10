@@ -51,10 +51,10 @@ class Comment:
 
         return new_comments
 
-    def execute(self, videoid: str) -> None:
+    def execute(self, videoid: str, size: int) -> None:
         logging.info(f'Starting Scrapping for video with id {videoid}.....')
 
-        res: Response = requests.get(f'https://www.tiktok.com/api/comment/list/?aid=1988&aweme_id={videoid}&count=9999999').json()
+        res: Response = requests.get(f'https://www.tiktok.com/api/comment/list/?aid=1988&aweme_id={videoid}&count=9999999&cursor={size}').json()
 
         if(res['status_code'] > 0): return logging.error('invalid id video');
 

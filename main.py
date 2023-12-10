@@ -1,18 +1,15 @@
 import re
-import requests
-import logging
 import os
+import requests
 
 from json import dumps
 from argparse import ArgumentParser
-from comment import Comment
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s [ %(levelname)s ] :: %(message)s', datefmt="%Y-%m-%dT%H:%M:%S")
+from comment import Comment, logging
 
 if(__name__ == '__main__'):
     argp: ArgumentParser = ArgumentParser()
     argp.add_argument("--url", '-u', type=str, default='7170139292767882522')
-    argp.add_argument("--count", '-c', type=int, default=50)
+    argp.add_argument("--size", '-s', type=int, default=50)
     argp.add_argument("--output", '-o', type=str, default='data')
     args = argp.parse_args()
 
@@ -25,16 +22,17 @@ if(__name__ == '__main__'):
     
     comment: Comment = Comment()
 
-    data: dict = comment.execute(videoid)
+    for i in range(round(args.size / 50)):
+        data: dict = comment.execute(videoid, i * 50)
 
-    output: str = f'{args.output}/{videoid}'
+        output: str = f'{args.output}/{videoid}'
 
-    if(not os.path.exists(output)):
-            os.makedirs(output)
+        if(not os.path.exists(output)):
+                os.makedirs(output)
 
-    with open(f'{output}/{args.count}.json', 'w') as file:
-        file.write(dumps(data, ensure_ascii=False))
-        logging.info(f'Output data : {output}/{args.count}.json')
+        with open(f'{output}/{args.size}.json', 'w') as file:
+            file.write(dumps(data, ensure_ascii=False))
+            logging.info(f'Output data : {output}/{args.size}.json')
     
     logging.info('Scrapping Success...')
 
