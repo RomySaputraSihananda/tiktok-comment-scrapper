@@ -38,6 +38,8 @@ python main.py --url=7170139292767882522 --size=10 --output=data
 
 ## Sample Output
 
+![](https://raw.githubusercontent.com/RomySaputraSihananda/RomySaputraSihananda/main/images/Screenshot_20231211_001804.png)
+
 ```json
 {
   "caption": "makk aku jadi animee🤩#faceplay #faceplayapp #anime #harem #xysryo ",
