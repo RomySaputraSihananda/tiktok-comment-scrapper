@@ -15,7 +15,7 @@ class Comment:
         try:
             return datetime.fromtimestamp(milisecond).strftime("%Y-%m-%dT%H:%M:%S")
         except:
-            return datetime.fromtimestamp(milisecond/ 1000).strftime("%Y-%m-%dT%H:%M:%S")
+            return datetime.fromtimestamp(milisecond / 1000).strftime("%Y-%m-%dT%H:%M:%S")
 
     def __get_replies(self, commentid: str) -> list:
         print(commentid);
@@ -26,25 +26,24 @@ class Comment:
         new_comments: list = []
 
         for comment in comments:
+            new_comment = {
+                "username": comment['user']['unique_id'],
+                "nickname": comment['user']['nickname'],
+                "comment": comment['text'],
+                'create_time': self.__format_date(comment['create_time']),
+                "avatar": comment['user']['avatar_thumb']['url_list'][0]
+            }
+
             try:
-                new_comments.append({
-                    "username": comment['user']['unique_id'],
-                    "nickname": comment['user']['nickname'],
-                    "comment": comment['text'],
-                    'create_time': self.__format_date(comment['create_time']),
-                    "avatar": comment['user']['avatar_thumb']['url_list'][0],
+                new_comment.update({
                     "total_reply": comment['reply_comment_total'],
-                    "replies": self.__get_replies(comment['cid'])
+                    "replies": self.__get_replies(comment['cid']) if comment['reply_comment_total'] > 0 else [] 
                 })
 
             except:
-                new_comments.append({
-                    "username": comment['user']['unique_id'],
-                    "nickname": comment['user']['nickname'],
-                    "comment": comment['text'],
-                    'create_time': self.__format_date(comment['create_time']),
-                    "avatar": comment['user']['avatar_thumb']['url_list'][0],
-                })
+                pass
+
+            new_comments.append(new_comment)
 
         return new_comments
 
@@ -61,7 +60,8 @@ class Comment:
         with open('test.json', 'w') as file:
             file.write(dumps(self.__result, ensure_ascii=False))
 
+# testing
 if(__name__ == '__main__'):
     comment: Comment = Comment()
-    # comment.execute('7170139292767882522')
-    comment.execute('7308764254914628869')
+    comment.execute('7170139292767882522')
+    # comment.execute('7308764254914628869')
