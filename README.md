@@ -3,6 +3,7 @@
 # tiktok-comment-scrapper
 
 ![](https://raw.githubusercontent.com/RomySaputraSihananda/RomySaputraSihananda/main/images/GA-U-u2bsAApmn9.jpeg)
+Get all comments from tiktok video url or id
 
 ## Requirements
 
