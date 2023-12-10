@@ -33,7 +33,7 @@ python main.py --url=7170139292767882522 --size=10 --output=data
 | Flag     | Alias |           Description           | Example           |       Default       |
 | :------- | :---: | :-----------------------------: | :---------------- | :-----------------: |
 | --url    |  -u   | Url or video id of tiktok video | --url=<id or url> | 7170139292767882522 |
-| --size   |  -s   |       number of comments        | --size=10         |          5          |
+| --size   |  -s   |       number of comments        | --size=10         |         50          |
 | --output |  -o   |      json file output path      | --output=data     |        data         |
 
 ## Sample Output
