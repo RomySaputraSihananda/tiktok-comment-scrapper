@@ -4,6 +4,38 @@
 
 ![](https://raw.githubusercontent.com/RomySaputraSihananda/RomySaputraSihananda/main/images/GA-U-u2bsAApmn9.jpeg)
 
+## Requirements
+
+- **Python >= 3.11.4**
+- **Requests >= 2.31.0**
+
+## Installation
+
+```sh
+# Clonig Repository
+git clone https://github.com/romysaputrasihananda/tiktok-comment-scrapper
+
+# Change Directory
+cd tiktok-comment-scrapper
+
+# Install Requirement
+pip install -r requirements.txt
+```
+
+## Example Usages
+
+```sh
+python main.py --url=7170139292767882522 --size=10 --output=data
+```
+
+### Flags
+
+| Flag     | Alias |               Description               | Example                   |       Default       |
+| :------- | :---: | :-------------------------------------: | :------------------------ | :-----------------: |
+| --url    |  -u   |     Url or video id of tiktok video     | --url=7170139292767882522 | 7170139292767882522 |
+| --size   |  -s   | Number of comments you want to retrieve | --size=10                 |          5          |
+| --output |  -o   |          json file output path          | --output=data             |        data         |
+
 ## Sample Output
 
 ```json
@@ -43,3 +75,7 @@
   ]
 }
 ```
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
