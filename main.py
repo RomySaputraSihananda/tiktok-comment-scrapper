@@ -1,6 +1,7 @@
 import re
 import os
 import requests
+import math
 
 from json import dumps
 from argparse import ArgumentParser
@@ -22,19 +23,19 @@ if(__name__ == '__main__'):
     
     comment: Comment = Comment()
 
-    for i in range(round(args.size / 50)):
+    for i in range(math.ceil(args.size / 50)):
         data: dict = comment.execute(videoid, i * 50)
 
         output: str = f'{args.output}/{videoid}'
 
         if(not os.path.exists(output)):
                 os.makedirs(output)
-
-        with open(f'{output}/{args.size}.json', 'w') as file:
-            file.write(dumps(data, ensure_ascii=False))
-            logging.info(f'Output data : {output}/{args.size}.json')
+        if(data):
+            with open(f'{output}/{i * 50}-{(i + 1) * 50}.json', 'w') as file:
+                file.write(dumps(data, ensure_ascii=False, indent=2))
+                logging.info(f'Output data : {output}/{i * 50}-{(i + 1) * 50}.json')
     
-    logging.info('Scrapping Success...')
+    logging.info(f'Scrapping Success, Output all data : {output}')
 
     
 

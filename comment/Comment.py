@@ -4,7 +4,7 @@ import logging
 from requests import Response
 from datetime import datetime
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s [ %(levelname)s ] :: %(message)s', datefmt="%Y-%m-%dT%H:%M:%S")
+logging.basicConfig(level=logging.INFO, format='%(asctime)s [ %(levelname)s ]\t:: %(message)s', datefmt="%Y-%m-%dT%H:%M:%S")
 
 class Comment:
     def __init__(self) -> None:
@@ -52,16 +52,20 @@ class Comment:
         return new_comments
 
     def execute(self, videoid: str, size: int) -> None:
-        logging.info(f'Starting Scrapping for video with id {videoid}.....')
+        logging.info(f'Starting Scrapping for video with id {videoid}[{size} - {size + 50}]...')
 
         res: Response = requests.get(f'https://www.tiktok.com/api/comment/list/?aid=1988&aweme_id={videoid}&count=9999999&cursor={size}').json()
 
         if(res['status_code'] > 0): return logging.error('invalid id video');
 
-        self.__result['caption']: str = res['comments'][0]['share_info']['title']
-        self.__result['date_now']: str = self.__format_date(res['extra']['now'])
-        self.__result['video_url']: str = res['comments'][0]['share_info']['url']
-        self.__result['comments']:list = self.__filter_comments(res['comments'])
+        try:
+            self.__result['caption']: str = res['comments'][0]['share_info']['title']
+            self.__result['date_now']: str = self.__format_date(res['extra']['now'])
+            self.__result['video_url']: str = res['comments'][0]['share_info']['url']
+            self.__result['comments']:list = self.__filter_comments(res['comments'])
+
+        except:
+            return logging.error('comments are over')
 
         return self.__result
 
