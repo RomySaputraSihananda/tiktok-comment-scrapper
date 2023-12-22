@@ -23,6 +23,8 @@ if(__name__ == '__main__'):
     
     comment: Comment = Comment()
 
+    [json_full, dummy] = [[], {}];
+
     for i in range(math.ceil(args.size / 50)):
         data: dict = comment.execute(videoid, i * 50)
 
@@ -30,12 +32,20 @@ if(__name__ == '__main__'):
 
         if(not os.path.exists(output)):
                 os.makedirs(output)
+
         if(data):
+            dummy = data
+            json_full += data['comments']
+
             with open(f'{output}/{i * 50}-{(i + 1) * 50}.json', 'w') as file:
                 file.write(dumps(data, ensure_ascii=False, indent=2))
                 logging.info(f'Output data : {output}/{i * 50}-{(i + 1) * 50}.json')
+        
+    dummy['comments'] = json_full
+
+    with open(f'{output}/full.json', 'w') as file:
+        file.write(dumps(dummy, ensure_ascii=False, indent=2))
+        logging.info(f'Output data : {output}/full.json')
     
+
     logging.info(f'Scrapping Success, Output all data : {output}')
-
-    
-
