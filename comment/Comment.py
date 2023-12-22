@@ -21,8 +21,17 @@ class Comment:
             return datetime.fromtimestamp(milisecond / 1000).strftime("%Y-%m-%dT%H:%M:%S")
 
     def __get_replies(self, commentid: str) -> list:
-        res: Response = requests.get(f'https://www.tiktok.com/api/comment/list/reply/?aid=1988&comment_id={commentid}&count=9999999').json()
-        return self.__filter_comments(res['comments'])
+        [data, i] = [[], 0]
+
+        while(True):
+            res: Response = requests.get(f'https://www.tiktok.com/api/comment/list/reply/?aid=1988&comment_id={commentid}&count=9999999&cursor={i * 50}').json()
+            
+            if(not res['comments']): break
+
+            data += res['comments']
+            i += 1
+
+        return self.__filter_comments(data)
 
     def __filter_comments(self, comments: list) -> list:
         new_comments: list = []
