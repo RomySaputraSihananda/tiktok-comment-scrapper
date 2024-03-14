@@ -8,9 +8,9 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s [ %(levelname)s ]\t:
 
 class Comment:
     def __init__(self) -> None:
-        self.__result: dict = {}
-        self.__result["caption"]: str = None
-        self.__result["date_now"]: str = None
+        self.__result: dict             = {}
+        self.__result["caption"]: str   = None
+        self.__result["date_now"]: str  = None
         self.__result["video_url"]: str = None
         self.__result["comments"]: list = []
 
@@ -40,7 +40,6 @@ class Comment:
             if(comment['share_info']['desc']): logging.info(comment['share_info']['desc'])
 
             new_comment = {
-                "username": comment['user']['unique_id'],
                 "nickname": comment['user']['nickname'],
                 "comment": comment['text'],
                 'create_time': self.__format_date(comment['create_time']),
@@ -82,4 +81,3 @@ class Comment:
 if(__name__ == '__main__'):
     comment: Comment = Comment()
     comment.execute('7170139292767882522')
-    # comment.execute('7308764254914628869')

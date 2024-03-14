@@ -5,10 +5,13 @@
 ![](https://raw.githubusercontent.com/RomySaputraSihananda/RomySaputraSihananda/main/images/GA-U-u2bsAApmn9.jpeg)
 Get all comments from tiktok video url or id
 
+*This is a fork of RomySaputraSihananda's tikok comments scrapper with the purpose of speeding up time for a research project at the University of Guanajuato.*
+
 ## Requirements
 
 - **Python >= 3.11.4**
 - **Requests >= 2.31.0**
+- **Pandas   >= 2.2.0**
 
 ## Installation
 
@@ -26,7 +29,7 @@ pip install -r requirements.txt
 ## Example Usages
 
 ```sh
-python main.py --url=7170139292767882522 --size=10 --output=data
+python main.py --url=7170139292767882522 --size=10 --output=data --csv
 ```
 
 ### Flags
@@ -36,6 +39,7 @@ python main.py --url=7170139292767882522 --size=10 --output=data
 | --url    |  -u   | Url or video id of tiktok video | --url=id or url | 7170139292767882522 |
 | --size   |  -s   |       number of comments        | --size=10       |         50          |
 | --output |  -o   |      json file output path      | --output=data   |        data         |
+| --csv    |  -c   |   output all data in csv file   | --csv           |        False        |
 
 ## Sample Output
 

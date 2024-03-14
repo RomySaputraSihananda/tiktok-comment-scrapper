@@ -1,1 +1,2 @@
 Requests==2.31.0
+pandas==2.2.0
