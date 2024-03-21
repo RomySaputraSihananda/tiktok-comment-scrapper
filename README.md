@@ -5,7 +5,7 @@
 ![](https://raw.githubusercontent.com/RomySaputraSihananda/RomySaputraSihananda/main/images/GA-U-u2bsAApmn9.jpeg)
 Get all comments from tiktok video url or id
 
-*This is a fork of RomySaputraSihananda's tikok comments scrapper with the purpose of speeding up time for a research project at the University of Guanajuato.*
+*This is a fork of RomySaputraSihananda's tiktok comments scrapper with the purpose of speeding up time for a research project at the University of Guanajuato.*
 
 ## Changes in this fork
   - **Output as csv**
