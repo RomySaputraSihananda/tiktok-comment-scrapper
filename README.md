@@ -8,6 +8,7 @@ Get all comments from tiktok video url or id
 *This is a fork of RomySaputraSihananda's tiktok comments scrapper with the purpose of speeding up time for a research project at the University of Guanajuato.*
 
 ## Changes in this fork
+  - **Fech using asynchronimous calls**
   - **Output as csv**
   - **Can handle multiple urls,videoids**
 
@@ -48,6 +49,8 @@ python main.py --url="7170139292767882522, 7088137347954396442" --size=10 --outp
 | --size   |  -s   |       number of comments        | --size=10       |         50          |
 | --output |  -o   |      json file output path      | --output=data   |        data         |
 | --csv    |  -c   |   output all data in csv file   | --csv           |        False        |
+| --nojson |  -nj  |  don't output data in json file | --nojson        |        False        |
+| --merge  |  -m   |          merge all data         | --merge           |        False        |
 
 ## Sample Output
 
