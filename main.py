@@ -37,13 +37,13 @@ if(__name__ == '__main__'):
             dummy = data
             json_full += data['comments']
 
-            with open(f'{output}/{i * 50}-{(i + 1) * 50}.json', 'w') as file:
+            with open(f'{output}/{i * 50}-{(i + 1) * 50}.json', 'w', encoding='utf-8') as file:
                 file.write(dumps(data, ensure_ascii=False, indent=2))
                 logging.info(f'Output data : {output}/{i * 50}-{(i + 1) * 50}.json')
         
     dummy['comments'] = json_full
 
-    with open(f'{output}/full.json', 'w') as file:
+    with open(f'{output}/full.json', 'w', encoding='utf-8') as file:
         file.write(dumps(dummy, ensure_ascii=False, indent=2))
         logging.info(f'Output data : {output}/full.json')
     
