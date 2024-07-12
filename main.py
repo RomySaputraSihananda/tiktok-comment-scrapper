@@ -106,4 +106,15 @@ if(__name__ == '__main__'):
                 df.to_csv(f'{output}/full.csv')
                 logging.info(f'Output {len(df.index)} comments merged csv data: {output}/full.csv')
 
+            with open(f'{output}/{i * 50}-{(i + 1) * 50}.json', 'w', encoding='utf-8') as file:
+                file.write(dumps(data, ensure_ascii=False, indent=2))
+                logging.info(f'Output data : {output}/{i * 50}-{(i + 1) * 50}.json')
+        
+    dummy['comments'] = json_full
+
+    with open(f'{output}/full.json', 'w', encoding='utf-8') as file:
+        file.write(dumps(dummy, ensure_ascii=False, indent=2))
+        logging.info(f'Output data : {output}/full.json')
+
+
     print('Time: ' + str(time.time() - init));
