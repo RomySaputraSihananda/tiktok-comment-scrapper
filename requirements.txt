@@ -1,1 +1,4 @@
 Requests==2.31.0
+pandas==2.2.0
+aiohttp==3.9.5
+asyncio==3.4.3

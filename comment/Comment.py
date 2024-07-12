@@ -1,16 +1,33 @@
 import requests
 import logging
+import aiohttp
+import asyncio
 
 from requests import Response
 from datetime import datetime
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s [ %(levelname)s ]\t:: %(message)s', datefmt="%Y-%m-%dT%H:%M:%S")
 
+async def fetch(url, session):
+    try:
+        async with session.get(url) as response:
+            if(response.status != 200): return logging.error(f'invalid url: {url}');
+            return await response.json();
+    except aiohttp.ClientError as e:
+        print(f"Request failed: {e}")
+        return None;
+
+async def getComments(videoid_list: list):
+    async with aiohttp.ClientSession() as session:
+        tasks = [fetch(f'https://www.tiktok.com/api/comment/list/?aid=1988&aweme_id={videoid}&count=9999999', session) for videoid in videoid_list]
+        responses = await asyncio.gather(*tasks)
+        return responses
+
 class Comment:
     def __init__(self) -> None:
-        self.__result: dict = {}
-        self.__result["caption"]: str = None
-        self.__result["date_now"]: str = None
+        self.__result: dict             = {}
+        self.__result["caption"]: str   = None
+        self.__result["date_now"]: str  = None
         self.__result["video_url"]: str = None
         self.__result["comments"]: list = []
 
@@ -40,7 +57,6 @@ class Comment:
             if(comment['share_info']['desc']): logging.info(comment['share_info']['desc'])
 
             new_comment = {
-                "username": comment['user']['unique_id'],
                 "nickname": comment['user']['nickname'],
                 "comment": comment['text'],
                 'create_time': self.__format_date(comment['create_time']),
@@ -60,13 +76,7 @@ class Comment:
 
         return new_comments
 
-    def execute(self, videoid: str, size: int) -> None:
-        logging.info(f'Starting Scrapping for video with id {videoid}[{size} - {size + 50}]...')
-
-        res: Response = requests.get(f'https://www.tiktok.com/api/comment/list/?aid=1988&aweme_id={videoid}&count=9999999&cursor={size}').json()
-
-        if(res['status_code'] > 0): return logging.error('invalid id video');
-
+    def execute(self, res: str) -> None:
         try:
             self.__result['caption']: str = res['comments'][0]['share_info']['title']
             self.__result['date_now']: str = self.__format_date(res['extra']['now'])
@@ -82,4 +92,3 @@ class Comment:
 if(__name__ == '__main__'):
     comment: Comment = Comment()
     comment.execute('7170139292767882522')
-    # comment.execute('7308764254914628869')
