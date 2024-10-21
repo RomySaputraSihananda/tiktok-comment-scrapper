@@ -1,51 +1,68 @@
 import re
 import os
-import requests
-import math
+import click
+import json
 
-from json import dumps
-from argparse import ArgumentParser
-from comment import Comment, logging
+from loguru import logger
+
+from tiktokcomment import TiktokComment
+from tiktokcomment.typing import Comments
+
+__title__ = 'TikTok Comment Scrapper'
+__version__ = '2.0.0'
+
+@click.command(
+    help=__title__
+)
+@click.version_option(
+    version=__version__,
+    prog_name=__title__
+)
+@click.option(
+    "--aweme_id",
+    help='id video tiktok',
+    callback=lambda _, __, value: match.group(0) if(match := re.match(r"^\d+$", value)) else None
+)
+@click.option(
+    "--output",
+    default='data/',
+    help='directory output data'
+)
+def main(
+    aweme_id: str,
+    output: str
+): 
+    if(not aweme_id):
+        raise ValueError('example id : 7418294751977327878')      
+    
+    logger.info(
+        'start scrap comments %s' % aweme_id
+    )
+
+    comments: Comments = TiktokComment()(
+        aweme_id=aweme_id
+    )
+
+    if not (
+        os.path.exists(
+            dir := os.path.dirname(output)
+        )
+    ):
+        os.makedirs(dir)
+
+    json.dump(
+        comments.dict,
+        open(
+            (final_path := '%s%s.json' % (output, aweme_id)),
+            'w'
+        ),
+        ensure_ascii=False
+    )
+
+    logger.info(
+        'save comments %s on %s' % (aweme_id, final_path)
+    )
+
 
 if(__name__ == '__main__'):
-    argp: ArgumentParser = ArgumentParser()
-    argp.add_argument("--url", '-u', type=str, default='7170139292767882522')
-    argp.add_argument("--size", '-s', type=int, default=50)
-    argp.add_argument("--output", '-o', type=str, default='data')
-    args = argp.parse_args()
-
-    if "vm.tiktok.com" in args.url or "vt.tiktok.com" in args.url:
-        videoid = requests.head(args.url, stream=True, allow_redirects=True, timeout=5).url.split("/")[5].split("?", 1)[0]
-    elif re.match("^\d+$", args.url):
-        videoid = args.url
-    else:
-        videoid = args.url.split("/")[5].split("?", 1)[0]
-    
-    comment: Comment = Comment()
-
-    [json_full, dummy] = [[], {}];
-
-    for i in range(math.ceil(args.size / 50)):
-        data: dict = comment.execute(videoid, i * 50)
-
-        output: str = f'{args.output}/{videoid}'
-
-        if(not os.path.exists(output)):
-                os.makedirs(output)
-
-        if(data):
-            dummy = data
-            json_full += data['comments']
-
-            with open(f'{output}/{i * 50}-{(i + 1) * 50}.json', 'w', encoding='utf-8') as file:
-                file.write(dumps(data, ensure_ascii=False, indent=2))
-                logging.info(f'Output data : {output}/{i * 50}-{(i + 1) * 50}.json')
-        
-    dummy['comments'] = json_full
-
-    with open(f'{output}/full.json', 'w', encoding='utf-8') as file:
-        file.write(dumps(dummy, ensure_ascii=False, indent=2))
-        logging.info(f'Output data : {output}/full.json')
-    
-
-    logging.info(f'Scrapping Success, Output all data : {output}')
+    main()

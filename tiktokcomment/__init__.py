@@ -1,0 +1,1 @@
+from .tiktokcomment import TiktokComment
