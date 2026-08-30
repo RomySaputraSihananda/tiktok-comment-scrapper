@@ -1,85 +1,55 @@
 import json
-
 from datetime import datetime
-
 from typing import Optional, List, Dict, Any
 
 class Comment:
     def __init__(
-        self: 'Comment',
+        self,
         comment_id: str,
         username: str,
         nickname: str,
         comment: str,
-        create_time: str,
+        create_time: Any,
         avatar: str,
         total_reply: int,
-        replies: Optional[List['Comment']] = []
+        replies: Optional[List['Comment']] = None # FIXED: No mutable default
     ) -> None:
         self._comment_id: str = comment_id
         self._username: str = username
         self._nickname: str = nickname
         self._comment: str = comment
-        self._create_time: str = datetime\
-            .fromtimestamp(
-                create_time
-            ).strftime("%Y-%m-%dT%H:%M:%S")
         self._avatar: str = avatar
         self._total_reply: int = total_reply
-        self._replies: List['Comment'] = replies
+        self._replies: List['Comment'] = replies or [] # FIXED
+        
+        # FIXED: Robust timestamp parsing
+        if isinstance(create_time, (int, float)):
+            try:
+                self._create_time: str = datetime.fromtimestamp(create_time).strftime("%Y-%m-%dT%H:%M:%S")
+            except (ValueError, TypeError, OverflowError):
+                self._create_time: str = str(create_time)
+        else:
+            self._create_time: str = str(create_time)
 
     @property
-    def comment_id(
-        self: 'Comment'
-    ) -> str:
-        return self._comment_id
-    
+    def comment_id(self) -> str: return self._comment_id
     @property
-    def username(
-        self: 'Comment'
-    ) -> str:
-        return self._username
-    
+    def username(self) -> str: return self._username
     @property
-    def nickname(
-        self: 'Comment'
-    ) -> str:
-        return self._nickname
-    
+    def nickname(self) -> str: return self._nickname
     @property
-    def comment(
-        self: 'Comment'
-    ) -> str:
-        return self._comment
-    
+    def comment(self) -> str: return self._comment
     @property
-    def create_time(
-        self: 'Comment'
-    ) -> str:
-        return self._create_time
-    
+    def create_time(self) -> str: return self._create_time
     @property
-    def avatar(
-        self: 'Comment'
-    ) -> str:
-        return self._avatar
-    
+    def avatar(self) -> str: return self._avatar
     @property
-    def total_reply(
-        self: 'Comment'
-    ) -> int:
-        return self._total_reply
-    
+    def total_reply(self) -> int: return self._total_reply
     @property
-    def replies(
-        self: 'Comment'
-    ) -> List['Comment']:
-        return self._replies
-    
+    def replies(self) -> List['Comment']: return self._replies
+
     @property
-    def dict(
-        self: 'Comment'
-    ) -> Dict[str, Any]:
+    def dict(self) -> Dict[str, Any]:
         return {
             'comment_id': self._comment_id,
             'username': self._username,
@@ -90,14 +60,10 @@ class Comment:
             'total_reply': self._total_reply,
             'replies': [reply.dict for reply in self._replies]
         }
-    
+
     @property
-    def json(
-        self: 'Comment'
-    ) -> str:
-        return json.dumps(self.json)
-    
-    def __str__(
-        self: 'Comment'
-    ) -> str:
+    def json(self) -> str:
+        return json.dumps(self.dict, ensure_ascii=False) # FIXED: No infinite recursion
+
+    def __str__(self) -> str:
         return self.json

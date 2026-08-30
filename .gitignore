@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# uv lockfile (not committed because this project is also meant to used as a library)
+uv.lock
+
 # Distribution / packaging
 .Python
 build/
